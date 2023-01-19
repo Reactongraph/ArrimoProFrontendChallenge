@@ -9,9 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.0.3",
+    "@fullcalendar/daygrid": "^6.0.3",
+    "@fullcalendar/interaction": "^6.0.3",
+    "@fullcalendar/react": "^6.0.4",
+    "@fullcalendar/timegrid": "^6.0.3",
     "@next/font": "13.1.2",
-    "next": "13.1.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "antd": "^5.1.5",
+    "axios": "^1.2.3",
+    "formik": "^2.2.9",
+    "jsonwebtoken": "^9.0.0",
+    "next": "^11.1.4",
+    "next-transpile-modules": "^10.0.0",
+    "react": "~17.0.2",
+    "react-dom": "^17.0.2",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.6.2",
+    "redux": "^4.2.0",
+    "redux-logger": "^3.0.6"
   }
 }

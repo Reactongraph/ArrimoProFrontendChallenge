@@ -5,9 +5,17 @@ import { useRouter } from "next/dist/client/router";
 import axios from "axios";
 const baseUri = process.env.NEXT_PUBLIC_BASE_URL;
 import createNotification from "../../../components/common/helperFile";
+import { useEffect } from "react";
 
 const Login = () => {
   const router = useRouter();
+
+
+  useEffect(()=>{
+    if(localStorage.getItem("userToken")){
+      router.push("/users")
+    }
+  })
 
   const onFinish = async (values) => {
     try {

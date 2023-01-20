@@ -1,5 +1,5 @@
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Button, Input, Form, Typography } from "antd";
+import { Button, Input, Form, Typography, Link } from "antd";
 const { Title } = Typography;
 import router from "next/router";
 import axios from "axios";
@@ -7,7 +7,6 @@ const baseUri = process.env.NEXT_PUBLIC_BASE_URL;
 import createNotification from "../../../components/common/helperFile";
 
 const Signup = () => {
-
   const onFinish = (values) => {
     try {
       axios
@@ -17,12 +16,12 @@ const Signup = () => {
           cpassword: values.cpassword,
         })
         .then((res) => {
-          createNotification("Registration Successfull","success")
+          createNotification("Registration Successfull", "success");
           localStorage.setItem("userToken", res.data.token);
           router.push("/users");
         })
         .catch((err) => {
-          createNotification(err.response.data.message,"error")
+          createNotification(err.response.data.message, "error");
           console.log("error in request", err);
         });
     } catch (error) {
@@ -78,7 +77,6 @@ const Signup = () => {
           placeholder="Password"
         />
       </Form.Item>
-
       <Form.Item
         name="cpassword"
         dependencies={["password"]}
@@ -106,12 +104,20 @@ const Signup = () => {
           placeholder="Confirm Password"
         />
       </Form.Item>
-
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
           Sign up
-        </Button>
+        </Button>{" "}
       </Form.Item>
+      already have an account? {" "}
+      <Typography.Link
+        onClick={(e) => {
+          e.preventDefault;
+          router.push("/auth/login");
+        }}
+      >
+        Login
+      </Typography.Link>
     </Form>
   );
 };

@@ -1,23 +1,30 @@
 import { Button, Form, Input, Typography } from "antd";
+import {
+  UserOutlined,
+  LockOutlined,
+  HomeOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
 const { Title } = Typography;
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { GetUsers } from "../../redux/users/userActions";
+import { SignupUser } from "../../redux/users/userActions";
 
 const AddUserForm = () => {
-  const users = useSelector((state) => state.users.getUsers);
-
   const router = useRouter();
   const dispatch = useDispatch();
 
   const onFinish = (values) => {
-    const newUser = values;
-    newUser.key = (Math.random() + 1).toString(36).substring(1);
+    try {
+      const message = "User added Successfully";
+      dispatch(SignupUser({ values: values, message: message }));
 
-    console.log("Success:", newUser);
-
-    dispatch(GetUsers([...users, newUser]));
-    router.push("/users");
+      setTimeout(() => {
+        router.push("/users");
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -51,37 +58,101 @@ const AddUserForm = () => {
         rules={[
           {
             required: true,
-            message: "Please input your username!",
+            message: "Please input your name !",
           },
         ]}
       >
-        <Input type="text" placeholder="Name*" style={{ height: "3rem" }} />
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="Name"
+        />
       </Form.Item>
-
       <Form.Item
         name="age"
         rules={[
           {
             required: true,
-            message: "Please input your age!",
+            message: "Please input your age !",
           },
         ]}
       >
-        <Input type="number" placeholder="Age*" style={{ height: "3rem" }} />
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="Age"
+          type="number"
+        />
       </Form.Item>
-
       <Form.Item
         name="address"
         rules={[
           {
             required: true,
-            message: "Please input your address!",
+            message: "Please input your address !",
           },
         ]}
       >
-        <Input type="text" placeholder="Address*" style={{ height: "3rem" }} />
+        <Input
+          prefix={<HomeOutlined className="site-form-item-icon" />}
+          placeholder="Address"
+        />
       </Form.Item>
-
+      <Form.Item
+        name="email"
+        rules={[
+          {
+            required: true,
+            message: "Please input your email !",
+          },
+        ]}
+      >
+        <Input
+          prefix={<MailOutlined className="site-form-item-icon" />}
+          placeholder="Email"
+        />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[
+          {
+            required: true,
+            message: "Please input your password!",
+          },
+        ]}
+        hasFeedback
+      >
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Password"
+        />
+      </Form.Item>
+      <Form.Item
+        name="cpassword"
+        dependencies={["password"]}
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Please confirm your password!",
+          },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("password") === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error("The two passwords that you entered do not match!")
+              );
+            },
+          }),
+        ]}
+      >
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Confirm Password"
+        />
+      </Form.Item>
       <Form.Item
         wrapperCol={{
           offset: 0,

@@ -1,20 +1,16 @@
 import "../styles/globals.css";
 import { Provider } from "react-redux";
-import store from "../redux/store";
+import { PersistGate } from "redux-persist/lib/integration/react";
+import configureStore from "../redux/store";
 
-import { saveState } from "../redux/localStorage";
-
-store.subscribe(() => {
-  saveState({
-    user: store.getState().users,
-    event: store.getState().events
-  });
-}); 
+let { store, persistor } = configureStore();
 
 export default function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <PersistGate loading={null} persistor={persistor}>
+        <Component {...pageProps} />
+      </PersistGate>
     </Provider>
   );
 }

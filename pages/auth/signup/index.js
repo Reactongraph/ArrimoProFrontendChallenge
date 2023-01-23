@@ -1,29 +1,27 @@
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Button, Input, Form, Typography, Link } from "antd";
+import {
+  UserOutlined,
+  LockOutlined,
+  HomeOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
+import { Button, Input, Form, Typography } from "antd";
 const { Title } = Typography;
 import router from "next/router";
-import axios from "axios";
-const baseUri = process.env.NEXT_PUBLIC_BASE_URL;
-import createNotification from "../../../components/common/helperFile";
+import { useDispatch } from "react-redux";
+import { LoginUserId, SignupUser } from "../../../redux/users/userActions";
 
 const Signup = () => {
+  const dispatch = useDispatch();
+
   const onFinish = (values) => {
     try {
-      axios
-        .post(`${baseUri}/signup`, {
-          email: values.email,
-          password: values.password,
-          cpassword: values.cpassword,
-        })
-        .then((res) => {
-          createNotification("Registration Successfull", "success");
-          localStorage.setItem("userToken", res.data.token);
-          router.push("/users");
-        })
-        .catch((err) => {
-          createNotification(err.response.data.message, "error");
-          console.log("error in request", err);
-        });
+      dispatch(LoginUserId(values.email));
+      const message = "Registration Successful";
+      dispatch(SignupUser({ values: values, message: message }));
+
+      setTimeout(() => {
+        router.push("/users");
+      }, 2000);
     } catch (error) {
       console.log(error);
     }
@@ -42,11 +40,54 @@ const Signup = () => {
       wrapperCol={{
         span: 12,
       }}
-      style={{ paddingLeft: "36%", paddingTop: "10%" }}
+      style={{ paddingLeft: "36%", paddingTop: "5%" }}
     >
       <Title level={3} style={{ marginBottom: 32 }}>
         Signup
       </Title>
+      <Form.Item
+        name="name"
+        rules={[
+          {
+            required: true,
+            message: "Please input your name !",
+          },
+        ]}
+      >
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="Name"
+        />
+      </Form.Item>
+      <Form.Item
+        name="age"
+        rules={[
+          {
+            required: true,
+            message: "Please input your age !",
+          },
+        ]}
+      >
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="Age"
+          type="number"
+        />
+      </Form.Item>
+      <Form.Item
+        name="address"
+        rules={[
+          {
+            required: true,
+            message: "Please input your address !",
+          },
+        ]}
+      >
+        <Input
+          prefix={<HomeOutlined className="site-form-item-icon" />}
+          placeholder="Address"
+        />
+      </Form.Item>
       <Form.Item
         name="email"
         rules={[
@@ -57,7 +98,7 @@ const Signup = () => {
         ]}
       >
         <Input
-          prefix={<UserOutlined className="site-form-item-icon" />}
+          prefix={<MailOutlined className="site-form-item-icon" />}
           placeholder="Email"
         />
       </Form.Item>
@@ -109,7 +150,7 @@ const Signup = () => {
           Sign up
         </Button>{" "}
       </Form.Item>
-      already have an account? {" "}
+      already have an account?{" "}
       <Typography.Link
         onClick={(e) => {
           e.preventDefault;

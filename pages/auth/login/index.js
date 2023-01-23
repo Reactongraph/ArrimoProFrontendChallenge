@@ -2,41 +2,33 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Input, Form, Typography } from "antd";
 const { Title } = Typography;
 import { useRouter } from "next/dist/client/router";
-import axios from "axios";
-const baseUri = process.env.NEXT_PUBLIC_BASE_URL;
-import createNotification from "../../../components/common/helperFile";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { LoginUser, LoginUserId } from "../../../redux/users/userActions";
 
 const Login = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
-
-  useEffect(()=>{
-    if(localStorage.getItem("userToken")){
-      router.push("/users")
+  useEffect(() => {
+    if (localStorage.getItem("userToken")) {
+      router.push("/users");
     }
-  })
+  });
 
   const onFinish = async (values) => {
     try {
-      axios
-        .post(`${baseUri}/login`, {
-          email: values.email,
-          password: values.password,
-        })
-        .then((res) => {
-          createNotification(" Login successfull", "success");
-          localStorage.setItem("userToken", res.data.token);
-          router.push("/users");
-        })
-        .catch((err) => {
-          createNotification("Invalid details", "error");
-          console.log("error in request", err);
-        });
+      dispatch(LoginUserId(values.email));
+      dispatch(LoginUser(values));
+
+      setTimeout(() => {
+        router.push("/users");
+      }, 3000);
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <Form
       name="normal_login"
@@ -53,7 +45,7 @@ const Login = () => {
       }}
       style={{ paddingLeft: "36%", paddingTop: "10%" }}
     >
-      <Title level={3} style={{marginBottom: 32 }}>
+      <Title level={3} style={{ marginBottom: 32 }}>
         Login
       </Title>
       <Form.Item

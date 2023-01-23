@@ -1,24 +1,46 @@
-import { GET_USERS, EDIT_USER, DELETE_USER,UPDATE_USERS } from "./userActions";
-import { loadState } from "../localStorage";
-
-const persistedState = loadState();
+import {
+  GET_USERS,
+  EDIT_USER_ID,
+  DELETE_USER,
+  UPDATE_USERS,
+  LOGIN_USER_ID,
+  LOGIN_USER,
+  SIGNUP_USER,
+} from "./userActions";
 
 const initialstate = {
   getUsers: [],
+  loginUserId: "",
   editUserId: "",
-  getUserEmail: "",
 };
 
-const userReducer = (state = persistedState?.user || initialstate, actions) => {
+const userReducer = (state = initialstate, actions) => {
   switch (actions.type) {
     case GET_USERS:
-      console.log(actions.payload, "actions.payload");
       return {
         ...state,
-        getUsers: actions.payload,
+        getUsers: actions.users,
       };
 
-    case EDIT_USER:
+    case LOGIN_USER:
+      return {
+        ...state,
+        getUsers: actions.users,
+      };
+
+    case SIGNUP_USER:
+      return {
+        ...state,
+        getUsers: actions.users,
+      };
+
+    case LOGIN_USER_ID:
+      return {
+        ...state,
+        loginUserId: actions.payload,
+      };
+
+    case EDIT_USER_ID:
       return {
         ...state,
         editUserId: actions.payload,
@@ -27,15 +49,14 @@ const userReducer = (state = persistedState?.user || initialstate, actions) => {
     case UPDATE_USERS:
       return {
         ...state,
-        getUsers: actions.payload,
-
+        getUsers: actions.users,
       };
 
     case DELETE_USER:
       return {
         ...state,
 
-        getUsers: state.getUsers.filter((item) => item.key !== actions.payload),
+        getUsers: state.getUsers.filter((item) => item._id !== actions.payload),
       };
 
     default:
